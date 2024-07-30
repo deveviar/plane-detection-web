@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, get } from 'firebase/database';
 const firebaseConfig = {
@@ -6,10 +6,12 @@ const firebaseConfig = {
 };
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getDatabase(firebaseApp);
-export async function GET(req:any) {
+export async function GET(req:NextRequest,id:{params:{id:string}}) {
 
+  
   try {
-    const dbRef = ref(db, "link");
+
+    const dbRef = ref(db, "links/"+id.params.id);
     const snapshot = await get(dbRef);
     if (snapshot.exists()) {
       return NextResponse.json({ link: snapshot.val() });
